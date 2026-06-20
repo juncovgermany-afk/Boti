@@ -126,8 +126,8 @@ ABOUT_TEXT = (
 )
 
 CONTACTS_TEXT = (
-    "Телеграмм: Your username"
-    "ВК: имя в вк"
+    "Телеграмм: @Maxsimad"
+    "ВК: Раткогло Максим"
 )
 
 WEBSITE_TEXT = "Наш сайт-визитка: [ссылка на сайт](https://example.com)"
