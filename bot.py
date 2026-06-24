@@ -131,7 +131,6 @@ CONTACTS_TEXT = (
 )
 
 WEBSITE_TEXT = "Наш сайт-визитка: [https://turbosite.na4u.ru](https://turbosite.na4u.ru)"
-](https://example.com)"
 TG_CHANNEL_TEXT = "Наш Telegram-канал: [@Turbosite_channel](https://t.me/Turbosite_channel)"
 
 
