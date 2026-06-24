@@ -6,8 +6,6 @@ from telegram.ext import (
     CommandHandler,
     ContextTypes,
     ConversationHandler,
-    MessageHandler,
-    filters,
     CallbackQueryHandler,
 )
 
@@ -22,47 +20,42 @@ logger = logging.getLogger(__name__)
 (
     WELCOME,
     MAIN_MENU,
-    PACKAGES,
     ABOUT,
     CONTACTS,
-) = range(5)
+) = range(4)
 
 # ==================== КЛАВИАТУРЫ ====================
 
 def get_welcome_keyboard():
-    """Клавиатура для приветственного сообщения (Новый шаг)"""
+    """Клавиатура для приветственного сообщения"""
     return InlineKeyboardMarkup([
         [InlineKeyboardButton("Далее", callback_data="next_step")],
         [InlineKeyboardButton("На этом хватит", callback_data="stop")],
     ])
 
-
 def get_main_menu_keyboard():
-    """Главное меню (Сообщение 2)"""
+    """Главное меню (кнопки-ссылки для сайта и канала)"""
     return InlineKeyboardMarkup([
         [InlineKeyboardButton("Пакеты услуг / их стоимость", callback_data="packages")],
-        [InlineKeyboardButton("Наш сайт-визитка", callback_data="website")],
-        [InlineKeyboardButton("Наш тг-канал", callback_data="tg_channel")],
+        [InlineKeyboardButton("Наш сайт-визитка", url="https://turbosite.na4u.ru")],
+        [InlineKeyboardButton("Наш тг-канал", url="https://t.me/Turbosite_channel")],
         [InlineKeyboardButton("Средства связи со мной", callback_data="contacts")],
         [InlineKeyboardButton("В чём заключается моя работа", callback_data="about")],
         [InlineKeyboardButton("Вернуться к прошлому шагу", callback_data="back_to_welcome")],
     ])
 
-
 def get_about_keyboard():
-    """Клавиатура для сообщения «О себе» (Сообщение 4)"""
+    """Клавиатура для сообщения «О себе»"""
     return InlineKeyboardMarkup([
         [InlineKeyboardButton("Средства связи", callback_data="contacts")],
         [InlineKeyboardButton("Меню", callback_data="main_menu")],
     ])
 
-
 def get_contacts_keyboard():
-    """Клавиатура для контактов (Сообщение 5)"""
+    """Клавиатура для контактов"""
     return InlineKeyboardMarkup([
         [InlineKeyboardButton("В меню", callback_data="main_menu")],
     ])
-
 
 # ==================== ТЕКСТЫ СООБЩЕНИЙ ====================
 
@@ -115,7 +108,7 @@ ABOUT_TEXT = (
     "и собирать заявки 24/7\n"
     "✅ «Помощь с рекламой» — подбор каналов, печать и расклейка листовок\n\n"
     "**Почему вам стоит обратиться ко мне?**\n\n"
-    " «Экономия времени» — вы занимаетесь своим делом, а я делаю так, "
+    "⏱ «Экономия времени» — вы занимаетесь своим делом, а я делаю так, "
     "чтобы клиенты сами вас находили.\n"
     "💰 «Доступные цены» — пакеты от 1500 ₽, без скрытых платежей.\n"
     "🔑 «Под ключ» — я не просто настраиваю, а объясняю, как пользоваться, "
@@ -126,13 +119,9 @@ ABOUT_TEXT = (
 )
 
 CONTACTS_TEXT = (
-    "Телеграмм: @Maxsimad"
-    " ВК: Раткогло Максим"
+    "Телеграмм: @Maxsimad\n"
+    "ВК: Раткогло Максим"
 )
-
-WEBSITE_TEXT = "Наш сайт-визитка: https://turbosite.na4u.ru"
-TG_CHANNEL_TEXT = "Наш Telegram-канал: https://t.me/Turbosite_channel"
-
 
 # ==================== ОБРАБОТЧИКИ ====================
 
@@ -147,7 +136,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         parse_mode="HTML",
     )
     return WELCOME
-
 
 async def welcome_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Обработчик кнопок приветственного экрана"""
@@ -169,7 +157,6 @@ async def welcome_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
     return WELCOME
 
-
 async def main_menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Обработчик главного меню"""
     query = update.callback_query
@@ -180,22 +167,6 @@ async def main_menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) 
             PACKAGES_TEXT,
             reply_markup=get_main_menu_keyboard(),
             parse_mode="HTML",
-        )
-        return MAIN_MENU
-
-    elif query.data == "website":
-        await query.edit_message_text(
-            WEBSITE_TEXT,
-            reply_markup=get_main_menu_keyboard(),
-            parse_mode="Markdown",
-        )
-        return MAIN_MENU
-
-    elif query.data == "tg_channel":
-        await query.edit_message_text(
-            TG_CHANNEL_TEXT,
-            reply_markup=get_main_menu_keyboard(),
-            parse_mode="Markdown",
         )
         return MAIN_MENU
 
@@ -226,7 +197,6 @@ async def main_menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
     return MAIN_MENU
 
-
 async def about_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Обработчик кнопок на экране «О себе»"""
     query = update.callback_query
@@ -248,7 +218,6 @@ async def about_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> i
 
     return ABOUT
 
-
 async def contacts_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Обработчик кнопок на экране контактов"""
     query = update.callback_query
@@ -263,37 +232,28 @@ async def contacts_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -
 
     return CONTACTS
 
-
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Отмена диалога"""
     await update.message.reply_text("Диалог завершён. Напишите /start, чтобы начать заново.")
     return ConversationHandler.END
 
-
 # ==================== ЗАПУСК БОТА ====================
 
 def main():
-    # Вставьте сюда токен вашего бота от @BotFather
     TOKEN = os.getenv('BOT_TOKEN')
+    if not TOKEN:
+        logger.error("BOT_TOKEN не задан!")
+        return
 
     application = Application.builder().token(TOKEN).build()
 
-    # Конвейер разговора (ConversationHandler)
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler("start", start)],
         states={
-            WELCOME: [
-                CallbackQueryHandler(welcome_handler),
-            ],
-            MAIN_MENU: [
-                CallbackQueryHandler(main_menu_handler),
-            ],
-            ABOUT: [
-                CallbackQueryHandler(about_handler),
-            ],
-            CONTACTS: [
-                CallbackQueryHandler(contacts_handler),
-            ],
+            WELCOME: [CallbackQueryHandler(welcome_handler)],
+            MAIN_MENU: [CallbackQueryHandler(main_menu_handler)],
+            ABOUT: [CallbackQueryHandler(about_handler)],
+            CONTACTS: [CallbackQueryHandler(contacts_handler)],
         },
         fallbacks=[CommandHandler("cancel", cancel)],
     )
@@ -302,7 +262,6 @@ def main():
 
     print("Бот запущен...")
     application.run_polling(allowed_updates=Update.ALL_TYPES)
-
 
 if __name__ == "__main__":
     main()
