@@ -130,8 +130,8 @@ CONTACTS_TEXT = (
     " ВК: Раткогло Максим"
 )
 
-WEBSITE_TEXT = "Наш сайт-визитка: [https://turbosite.na4u.ru](https://turbosite.na4u.ru)"
-TG_CHANNEL_TEXT = "Наш Telegram-канал: [@Turbosite_channel](https://t.me/Turbosite_channel)"
+WEBSITE_TEXT = "Наш сайт-визитка: https://turbosite.na4u.ru"
+TG_CHANNEL_TEXT = "Наш Telegram-канал: https://t.me/Turbosite_channel"
 
 
 # ==================== ОБРАБОТЧИКИ ====================
